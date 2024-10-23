@@ -44,9 +44,7 @@ public class AttackPlayer : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-       Gizmos.color = Color.red;
 
-       Gizmos.DrawRay(direction.transform.position, (direction.transform.position - transform.position) * 3f);
     }
 
 
