@@ -23,6 +23,7 @@ public class RigidbodyMovement : MonoBehaviour
     [SerializeField] Vector2 wallJumpingPower = new Vector2(8f, 16f);
     [SerializeField] float wallJumpingDirection;
     [SerializeField] float wallJumpDuration;
+    [SerializeField] bool wallJumped;
 
 
     private void OnEnable()
@@ -46,8 +47,14 @@ public class RigidbodyMovement : MonoBehaviour
             rb.velocity = new Vector2(move.x * speed * Time.deltaTime, rb.velocity.y);
             flip();
         }
-        
-        if(WallDetected())
+
+        WallSlide();
+
+    }
+
+    void WallSlide()
+    {
+        if (WallDetected())
         {
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -3f));  // Limitar la velocidad de caída
         }
@@ -55,7 +62,14 @@ public class RigidbodyMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y);
         }
+    }
 
+    private void Update()
+    {
+        if (isGrounded())
+        {
+            wallJumped = false;
+        }
     }
 
     void Move(Vector2 _input)
@@ -86,7 +100,7 @@ public class RigidbodyMovement : MonoBehaviour
 
     void WallJump()
     {
-        if (!isGrounded())
+        if (!isGrounded() && !wallJumped)
         {
             if (WallDetected())
             {
@@ -100,6 +114,8 @@ public class RigidbodyMovement : MonoBehaviour
                     localScale.x *= -1;
                     transform.localScale = localScale;
                 }
+
+                wallJumped = true;
                 Invoke(nameof(RecoverMovement), wallJumpDuration);
             }
         }
