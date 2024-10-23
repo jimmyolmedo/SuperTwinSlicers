@@ -29,14 +29,14 @@ public class AttackPlayer : MonoBehaviour
         {
             //desactivar la rueda
             direction.gameObject.SetActive(false);
-            Debug.DrawRay(direction.transform.position, direction.transform.position - transform.position, Color.red);
-            RaycastHit2D hit = Physics2D.Raycast(direction.transform.position, direction.transform.position - transform.position, 3f, enemyLayer);
-            Debug.Log("he atacado");
 
             //volver el tiempo a la normalidad
             Time.timeScale = 1.0f;
 
             //ejecutar ataque
+
+            RaycastHit2D hit = Physics2D.Raycast(direction.transform.position, direction.transform.position - transform.position, 3f, enemyLayer);
+            Debug.Log("he atacado");
         }
 
 
@@ -46,7 +46,7 @@ public class AttackPlayer : MonoBehaviour
     {
        Gizmos.color = Color.red;
 
-        Gizmos.DrawRay(direction.transform.position, direction.transform.position - transform.position);
+       Gizmos.DrawRay(direction.transform.position, (direction.transform.position - transform.position) * 3f);
     }
 
 

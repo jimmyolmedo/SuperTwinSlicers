@@ -115,7 +115,7 @@ public class RigidbodyMovement : MonoBehaviour
                     transform.localScale = localScale;
                 }
 
-                wallJumped = true;
+                wallJumped = false;
                 Invoke(nameof(RecoverMovement), wallJumpDuration);
             }
         }
