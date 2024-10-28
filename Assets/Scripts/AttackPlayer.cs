@@ -8,39 +8,36 @@ public class AttackPlayer : MonoBehaviour
 
     [SerializeField] LayerMask enemyLayer;
 
-    private void Update()
+    [SerializeField] RigidbodyMovement rigidbodyMovement;
+
+
+
+    public void StartedAirAttack()
     {
-        Attack();
+        //activar la rueda(ataque)
+        direction.gameObject.SetActive(true);
+        Debug.Log("atacando");
+
+        //realentizar el tiempo
+        Time.timeScale = 0.05f;
     }
 
-    void Attack()
+    public void EndedAirAttack()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            //activar la rueda(ataque)
-            direction.gameObject.SetActive(true);
-            Debug.Log("atacando");
+        //desactivar la rueda
+        direction.gameObject.SetActive(false);
 
-            //realentizar el tiempo
-            Time.timeScale = 0.05f;
-        }
+        //volver el tiempo a la normalidad
+        Time.timeScale = 1.0f;
 
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            //desactivar la rueda
-            direction.gameObject.SetActive(false);
-
-            //volver el tiempo a la normalidad
-            Time.timeScale = 1.0f;
-
-            //ejecutar ataque
-
-            RaycastHit2D hit = Physics2D.Raycast(direction.transform.position, direction.transform.position - transform.position, 3f, enemyLayer);
-            Debug.Log("he atacado");
-        }
+        //ejecutar ataque
+        //Debug.DrawLine(direction.transform.position, (direction.transform.position - transform.position) ,Color.red, 3f);
+        //RaycastHit2D hit = Physics2D.Raycast(direction.transform.position, direction.transform.position - transform.position, 3f, enemyLayer);
 
 
+        Debug.Log("he atacado");
     }
+
 
     private void OnDrawGizmos()
     {

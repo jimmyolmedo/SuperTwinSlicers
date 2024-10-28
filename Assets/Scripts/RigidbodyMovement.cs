@@ -25,28 +25,10 @@ public class RigidbodyMovement : MonoBehaviour
     [SerializeField] float wallJumpDuration;
     [SerializeField] bool wallJumped;
 
-
-    private void OnEnable()
-    {
-        InputManager.OnMove += Move;
-        InputManager.OnJump += Jump;
-        InputManager.OnJump += WallJump;
-    }
-
-    private void OnDisable()
-    {
-        InputManager.OnMove -= Move;
-        InputManager.OnJump -= Jump;
-        InputManager.OnJump -= WallJump;
-    }
-
     void FixedUpdate()
     {
-        if (canMove)
-        {
-            rb.velocity = new Vector2(move.x * speed * Time.deltaTime, rb.velocity.y);
-            flip();
-        }
+        rb.velocity = new Vector2(move.x * speed * Time.deltaTime, rb.velocity.y);
+        flip();
 
         WallSlide();
 
@@ -72,7 +54,7 @@ public class RigidbodyMovement : MonoBehaviour
         }
     }
 
-    void Move(Vector2 _input)
+    public void Move(Vector2 _input)
     {
         float x = _input.x;
         float y = _input.y;
@@ -90,7 +72,7 @@ public class RigidbodyMovement : MonoBehaviour
         }
     }
 
-    void Jump()
+    public void Jump()
     {
         if (isGrounded())
         {
@@ -98,7 +80,7 @@ public class RigidbodyMovement : MonoBehaviour
         }
     }
 
-    void WallJump()
+    public void WallJump()
     {
         if (!isGrounded() && !wallJumped)
         {
@@ -136,6 +118,16 @@ public class RigidbodyMovement : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void InvokeInpulse(Vector3 _direction, float _force, float _impulseDuration)
+    {
+        canMove = false;
+        rb.velocity = new Vector2(_direction.x * _force, _direction.y * _force);
+
+        Invoke(nameof(RecoverMovement), _impulseDuration);
+
+        //rb.AddForce(_direction * _force);
     }
 
     bool WallDetected()

@@ -17,8 +17,8 @@ public class InputManager : MonoBehaviour
     
     public static event System.Action<Vector2> OnMove;
     public static event System.Action OnJump;
-    public static event System.Action OnShoot;
-    public static event System.Action OnDash;
+    public static event System.Action OnStartedAirAttack;
+    public static event System.Action OnEndedAirAttack;
 
     public static ControlScheme CurrentScheme {get; private set;}
 
@@ -47,8 +47,7 @@ public class InputManager : MonoBehaviour
 
         TryInvokeMove(context);
         TryInvokeJump(context);
-        TryInvokeShoot(context);
-        TryInvokeDash(context);
+        TryInvokeAirAttack(context);
     }
 
     void CheckControlScheme()
@@ -87,22 +86,19 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    void TryInvokeShoot(InputAction.CallbackContext context)
+    void TryInvokeAirAttack(InputAction.CallbackContext context)
     {
-        if (context.action.name != "Shoot") return;
-
-        OnShoot?.Invoke();
-    }
-
-    void TryInvokeDash(InputAction.CallbackContext context)
-    {
-        if (context.action.name != "Dash") return;
+        if (context.action.name != "Attack") return;
 
         if (context.started)
         {
-            OnDash?.Invoke();
+            OnStartedAirAttack?.Invoke();
+        }
+
+        if (context.canceled)
+        {
+            OnEndedAirAttack?.Invoke();
         }
     }
-
 
 }
