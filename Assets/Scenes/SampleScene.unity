@@ -970,6 +970,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   rigidbodyMovement: {fileID: 793073465}
+  animator: {fileID: 793073472}
 --- !u!114 &793073471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -986,6 +987,11 @@ MonoBehaviour:
   rM: {fileID: 793073465}
   Attack: {fileID: 793073470}
   canMove: 1
+  groundCheckerBoxSize: {x: 0.31, y: 0.1}
+  groundCheckerCastDistance: 1.09
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!95 &793073472
 Animator:
   serializedVersion: 5

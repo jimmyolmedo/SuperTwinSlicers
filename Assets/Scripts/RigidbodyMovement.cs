@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class RigidbodyMovement : MonoBehaviour
@@ -27,7 +28,10 @@ public class RigidbodyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(move.x * speed * Time.deltaTime, rb.velocity.y);
+        if (canMove)
+        {
+            rb.velocity = new Vector2(move.x * speed * Time.deltaTime, rb.velocity.y);
+        }
         flip();
 
         WallSlide();
@@ -67,7 +71,8 @@ public class RigidbodyMovement : MonoBehaviour
         if(move.x != 0)
         {
             Vector3 localscale = transform.localScale;
-            localscale.x = move.x;
+            localscale.x = Mathf.Sign(move.x);
+            
             transform.localScale = localscale;
         }
     }
@@ -108,9 +113,9 @@ public class RigidbodyMovement : MonoBehaviour
         canMove = true;
     }
 
-    bool isGrounded()
+    public bool isGrounded()
     {
-        if(Physics2D.BoxCast(transform.position, groundCheckerBoxSize, 0, -transform.up, groundCheckerCastDistance, groundLayer))
+        if (Physics2D.BoxCast(transform.position, groundCheckerBoxSize, 0, -transform.up, groundCheckerCastDistance, groundLayer))
         {
             return true;
         }
@@ -144,7 +149,7 @@ public class RigidbodyMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position-transform.up * groundCheckerCastDistance, groundCheckerBoxSize);
+        Gizmos.DrawWireCube(transform.position - transform.up * groundCheckerCastDistance, groundCheckerBoxSize);
         Gizmos.DrawWireCube(transform.position-transform.right * wallCheckerCastDistance, wallChekerBoxSize);
     }
 

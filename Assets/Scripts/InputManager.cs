@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     public static event System.Action OnJump;
     public static event System.Action OnStartedAirAttack;
     public static event System.Action OnEndedAirAttack;
+    public static event System.Action OnNormalAttack;
 
     public static ControlScheme CurrentScheme {get; private set;}
 
@@ -48,6 +49,7 @@ public class InputManager : MonoBehaviour
         TryInvokeMove(context);
         TryInvokeJump(context);
         TryInvokeAirAttack(context);
+        TryInvokeNormalAttack(context);
     }
 
     void CheckControlScheme()
@@ -86,9 +88,19 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    void TryInvokeNormalAttack(InputAction.CallbackContext context)
+    {
+        if (context.action.name != "NormalAttack") return;
+
+        if (context.started)
+        {
+            OnNormalAttack?.Invoke();
+        }
+    }
+
     void TryInvokeAirAttack(InputAction.CallbackContext context)
     {
-        if (context.action.name != "Attack") return;
+        if (context.action.name != "AirAttack") return;
 
         if (context.started)
         {

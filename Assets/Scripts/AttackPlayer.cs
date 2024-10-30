@@ -10,17 +10,31 @@ public class AttackPlayer : MonoBehaviour
 
     [SerializeField] RigidbodyMovement rigidbodyMovement;
 
+    [SerializeField] Animator animator;
 
+    public bool CanAttack {  get; private set; }
+
+    private void Awake()
+    {
+        CanAttack = true;
+    }
 
     public void StartedAirAttack()
     {
-        //activar la rueda(ataque)
-        direction.gameObject.SetActive(true);
-        Debug.Log("atacando");
+        if(rigidbodyMovement.isGrounded() == false)
+        {
+            //activar la rueda(ataque)
+            direction.gameObject.SetActive(true);
+            Debug.Log("atacando");
 
-        //realentizar el tiempo
-        Time.timeScale = 0.05f;
+            //realentizar el tiempo
+            Time.timeScale = 0.05f;
+
+            CanAttack = false;
+        }
     }
+
+    
 
     public void EndedAirAttack()
     {
@@ -36,8 +50,26 @@ public class AttackPlayer : MonoBehaviour
 
 
         Debug.Log("he atacado");
+
+        CanAttack = true;
     }
 
+    public void NormalAttack()
+    {
+        if (!CanAttack) return;
+
+        animator.SetTrigger("Attack");
+    }
+
+    public void DisableAttack()
+    {
+        CanAttack = false;
+    }
+
+    public void EnableAttack()
+    {
+        CanAttack = true;
+    }
 
     private void OnDrawGizmos()
     {
