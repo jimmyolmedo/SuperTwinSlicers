@@ -5,6 +5,7 @@ using UnityEngine.Windows;
 
 public class Okiyo : Character
 {
+
     [SerializeField] RigidbodyMovement rM;
     [SerializeField] AttackPlayer Attack;
     [SerializeField] bool canMove;
