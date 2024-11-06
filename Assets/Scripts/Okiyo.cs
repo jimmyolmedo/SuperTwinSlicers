@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class Okiyo : Character
+public class Okiyo : Character, Idamageable
 {
 
     [SerializeField] RigidbodyMovement rM;
@@ -13,8 +13,9 @@ public class Okiyo : Character
     [SerializeField] float groundCheckerCastDistance;
     [SerializeField] LayerMask groundLayer;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         currenLife = maxLife;
     }
 
@@ -61,6 +62,11 @@ public class Okiyo : Character
         base.Die();
     }
 
+
+    void GetDamage()
+    {
+
+    }
 
     private void OnDrawGizmos()
     {

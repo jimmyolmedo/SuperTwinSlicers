@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : Singleton<Character>
 {
     [SerializeField] protected int maxLife;
     protected int currenLife;
@@ -22,6 +22,8 @@ public class Character : MonoBehaviour
             }
         }
     }
+
+    protected override bool persistent => false;
 
     protected virtual void Die()
     {
