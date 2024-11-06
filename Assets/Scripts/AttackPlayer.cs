@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 using static UnityEngine.GraphicsBuffer;
 
 public class AttackPlayer : MonoBehaviour
@@ -15,6 +17,8 @@ public class AttackPlayer : MonoBehaviour
     [SerializeField] RigidbodyMovement rigidbodyMovement;
 
     [SerializeField] Animator animator;
+
+    public float x;
 
     public bool CanAttack {  get; private set; }
 
@@ -111,27 +115,9 @@ public class AttackPlayer : MonoBehaviour
 
     public void RecoverPos()
     {
-
-        //IEnumerator LerpQuaternion()
-        //{
-        //    for(float i  = 0; i < 0.01f;  i += Time.deltaTime)
-        //    {
-        //        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, i/0.01f);
-        //        yield return null;
-        //    }
-        //}
-
-        //StartCoroutine(LerpQuaternion());
-
-        Quaternion rotation = transform.rotation;
-        rotation.z = 0;
-        transform.rotation = rotation;
-
-        //Vector3 localscale = transform.localScale;
-        //localscale.x = Mathf.Clamp(direction.transform.position.x, -1, 1);
-        //localscale.x = Mathf.Sign(localscale.x);
-        //transform.localScale = localscale;
-
+        x = Mathf.Cos(transform.position.x);
+        transform.localScale = new Vector3(transform.localScale.x, 1,1);
+        transform.rotation = new Quaternion(0,0, 0, 0);
         Attaking = false;
     }
 

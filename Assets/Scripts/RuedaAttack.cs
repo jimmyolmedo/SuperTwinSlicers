@@ -18,8 +18,8 @@ public class RuedaAttack : MonoBehaviour
         float yy = player.position.y - mousePos.y;
         float rad = Mathf.Atan2(yy, xx);
 
-        float x = Mathf.Cos(rad) * -distance * player.transform.localScale.x;
-        float y = Mathf.Sin(rad) * -distance * player.transform.localScale.y;
+         float x = Mathf.Cos(rad) * -distance * player.transform.localScale.x;
+         float y = Mathf.Sin(rad) * -distance * player.transform.localScale.y;
 
         transform.localPosition = new Vector3(x, y);
     }
