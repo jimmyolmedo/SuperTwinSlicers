@@ -8,14 +8,21 @@ public class Goomba : Enemy, Idamageable
 
     [SerializeField] float speedLvl1;
     [SerializeField] float speedLvl2;
-    [SerializeField] float Direction = 1;
+    [SerializeField] float direction = 1;
     [SerializeField] bool canMove;
     [SerializeField] Rigidbody2D rB;
+    Transform player;
     [SerializeField] bool leftFromPlayer;
+     bool slowingDown;
+
+    private void Awake()
+    {
+        player = Character.instance.transform;
+    }
 
     private void Update()
     {
-
+        player = Character.instance.transform;
     }
 
     private void FixedUpdate()
@@ -27,7 +34,7 @@ public class Goomba : Enemy, Idamageable
     {
         if (canMove)
         {
-            rB.velocity = new Vector2(Direction * _speed * Time.deltaTime, 0);
+            rB.velocity = new Vector2(direction * _speed * Time.deltaTime, 0);
         }
     }
 
@@ -59,54 +66,62 @@ public class Goomba : Enemy, Idamageable
 
     void ChangeDirection()
     {
-        IEnumerator change(float a, float b)
+        IEnumerator change()
         {
-            canMove = false;
+            if (!slowingDown) yield break;
+
+            // Desacelera gradualmente hasta que la velocidad llegue a 0.
+            float initialSpeed = speedLvl2;
             for (float i = 0; i < 1.5f; i += Time.deltaTime)
             {
-                speedLvl2 = Mathf.Lerp(a, b, i/1.5f);
+                speedLvl2 = Mathf.Lerp(initialSpeed, 0f, i / 1.5f);
                 yield return null;
             }
-            canMove = true;
+
+            // Asegúrate de que la velocidad sea exactamente 0 y cambia la dirección.
+            speedLvl2 = 0f;
+            leftFromPlayer = !leftFromPlayer; // Cambia la dirección.
+            direction = leftFromPlayer ? 1f : -1f;
+
+            // Pausa breve antes de restaurar la velocidad.
+            yield return new WaitForSeconds(0.5f);
+            RestoreSpeed();
+            slowingDown = false;
         }
 
-        float value = Mathf.Sign(Character.instance.transform.position.x - transform.position.x);
-
-        if(value != Direction)
+        
+        // Verifica si el objeto ha pasado la posición del jugador.
+        if (!slowingDown && HasPassedPlayer())
         {
-            canMove = false;
-        }
-
-        if (leftFromPlayer == true && transform.position.x > Character.instance.transform.position.x)
-        {
-
-            change(speedLvl2, 0);
-
-            Direction = -1;
-            leftFromPlayer = false;
-
-            change(0, speedLvl2);
-        }
-
-        else if (leftFromPlayer == false && transform.position.x < Character.instance.transform.position.x)
-        {
-            canMove = false;
-            change(speedLvl2, 0);
-
-            Direction = 1;
-            leftFromPlayer = true;
-
-            change(0, speedLvl2);
-            canMove = true;
+            slowingDown = true;
+            StartCoroutine(change());
         }
     }
 
+    void RestoreSpeed()
+    {
+        speedLvl2 = 800f;
+    }
+
+    bool HasPassedPlayer()
+    {
+        // Detecta si el objeto ha pasado al jugador dependiendo de la dirección
+        if (direction == 1f && transform.position.x >= player.position.x)
+        {
+            return true; // Ha pasado al jugador moviéndose a la derecha
+        }
+        else if (direction == -1f && transform.position.x <= player.position.x)
+        {
+            return true; // Ha pasado al jugador moviéndose a la izquierda
+        }
+        return false;
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Pared"))
         {
-            Direction *= -1;
+            direction *= -1;
         }
     }
 }
