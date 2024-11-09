@@ -13,7 +13,8 @@ public class Goomba : Enemy, Idamageable
     [SerializeField] Rigidbody2D rB;
     Transform player;
     [SerializeField] bool leftFromPlayer;
-     bool slowingDown;
+    bool slowingDown;
+
 
     private void Awake()
     {
@@ -38,9 +39,16 @@ public class Goomba : Enemy, Idamageable
         }
     }
 
-    public void GetDamage()
+    public void GetDamage(bool _destroyer)
     {
-        Level++;
+        if (_destroyer)
+        {
+            die();
+        }
+        else
+        {
+            Level++;
+        }
     }
 
     protected override void Lvl1()
@@ -115,6 +123,11 @@ public class Goomba : Enemy, Idamageable
             return true; // Ha pasado al jugador moviéndose a la izquierda
         }
         return false;
+    }
+
+    protected override void die()
+    {
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

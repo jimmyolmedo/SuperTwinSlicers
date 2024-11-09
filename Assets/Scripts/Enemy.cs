@@ -38,4 +38,6 @@ public abstract class Enemy : MonoBehaviour
     protected abstract void Lvl2();
 
     protected abstract void Lvl3();
+
+    protected abstract void die();
 }
